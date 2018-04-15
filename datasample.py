@@ -7,9 +7,10 @@ import numpy as np
 # Declare and initialize global variables
 global index
 global df
+
 index = 0
-file = 'test.csv'
-df = pd.read_csv(file, encoding='utf-8').fillna(0)
+test = 'test.csv'
+df = pd.read_csv(test, encoding='utf-8').fillna(0)
 df = np.array(df)
 
 # Publishes messages to NSQ by reading from csv file
