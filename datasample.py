@@ -17,10 +17,16 @@ df = np.array(df)
 def pub_message():
 	global index
 	global df
-	row = df[index]
-	flow = row[1]
+        #row_index = df[index]
+        #flow_index = row_index[1]
+        data = df[index:index+12]
+        flows = data[:, 1]
+        #time = row[0].decode('utf-8')
+        #message = str(flow) + ' ' + str(time)
+        #print(message)
+        message = '  '.join(str(el) for el in flows)
 	index += 1
-	writer.pub('sample_app_1', str(flow), finish_pub)
+	writer.pub('nsq-spark-in', message, finish_pub)
 
 # Callback function
 def finish_pub(conn, data):
@@ -29,6 +35,6 @@ def finish_pub(conn, data):
 
 
 writer = nsq.Writer(['127.0.0.1:4150'])
-tornado.ioloop.PeriodicCallback(pub_message, 5000).start()
+tornado.ioloop.PeriodicCallback(pub_message, 1000).start()
 nsq.run()
 
