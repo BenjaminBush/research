@@ -42,8 +42,8 @@ func main() {
 		var message string = flows[i].flow
 		err := w.Publish("nsq-spark-in", []byte(message))
 		if err != nil {
-			log.Panic("Could not connect")
-		}	
+			log.Panic("Could not connect")	
+        }
 		time.Sleep(1000*time.Millisecond)
 	}
 	w.Stop()
