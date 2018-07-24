@@ -33,7 +33,7 @@ class LSTMNet(object):
 	def default_hypers(self):
 		hypers = {}
 		hypers['batch_size'] = 128
-		hypers['epochs'] = 600
+		hypers['epochs'] = 100
 		hypers['loss'] = 'mse'
 		hypers['metrics'] = ['mape']
 		hypers['optimizer'] = 'rmsprop'

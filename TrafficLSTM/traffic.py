@@ -2,22 +2,10 @@ import numpy as np
 
 from lstm import LSTMNet 
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
 import os
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-#from generator import DataGenerator
-
-# training_generator = DataGenerator('training')
-# validation_generator = DataGenerator('testing')
-
-# lstm = LSTM()
-# model = lstm.model
-# model.fit_generator(generator=training_generator,
-# 					validation_data=validation_generator,
-# 					use_multiprocessing=True,
-# 					workers=6)
 
 def get_data(train_file, test_file, lag):
 	train = pd.read_csv(train_file)
@@ -26,11 +14,22 @@ def get_data(train_file, test_file, lag):
 	time_feature = '5 Minutes'
 	flow_feature = 'Lane 1 Flow (Veh/5 Minutes)'
 
-	# Scale the flow between 0,1 using minmax scaler
-	scaler = MinMaxScaler(feature_range=(0,1)).fit(train[flow_feature].values.reshape(-1, 1))
+	# Scale the flow between 0 and 1 using minmax	
+	feature_range = (0,1)
+	data_min = np.min(train[flow_feature], axis=0)
+	data_max = np.max(train[flow_feature], axis=0)
+	data_range = data_max - data_min
 
-	flow_train = scaler.transform(train[flow_feature].values.reshape(-1,1).reshape(1, -1))[0]
-	flow_test = scaler.transform(test[flow_feature].values.reshape(-1,1).reshape(1, -1))[0]
+	scale_ = ((feature_range[1] - feature_range[0])/data_range)
+	min_ = feature_range[0]-data_min*scale_
+
+	flow_train = train[flow_feature]
+	flow_train *= scale_
+	flow_train += min_
+
+	flow_test = test[flow_feature]
+	flow_test *= scale_
+	flow_test += min_
 
 	train_list, test_list = [], []
 
@@ -47,6 +46,8 @@ def get_data(train_file, test_file, lag):
 	X_test = test_list[:, :-1]
 	y_test = test_list[:, -1]
 
+	scaler = (scale_, min_)
+
 	return X_train, y_train, X_test, y_test, scaler
 
 train_file = '../data/train.csv'
@@ -59,8 +60,13 @@ X_train, y_train, X_test, y_test, scaler = get_data(train_file, test_file, lag)
 # Reshape to (samples, dimension, timestep)
 X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
 X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+
+scale_ = scaler[0]
+min_ = scaler[1]
+
 y_scaled = y_test
-y_test = scaler.inverse_transform(y_test.reshape(-1, 1)).reshape(1, -1)[0]
+y_test -= min_
+y_test *= scale_
 
 lstm = LSTMNet()
 model = lstm.model
