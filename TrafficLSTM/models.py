@@ -27,9 +27,10 @@ class Model(object):
 	def default_dims(self):
 		dims = {}
 		dims['input_dim'] = 12
-		dims['hidden_units'] = 128
-		dims['output_dim'] = dims['hidden_units']
-		dims['dense_dim'] = 1
+		dims['lstm_dim1'] = 256
+		dims['lstm_dim2'] = 128
+		dims['dense_dim1'] = 64
+		dims['dense_dim2'] = 1
 		return dims
 
 	def default_hypers(self):
@@ -49,10 +50,12 @@ class Model(object):
 
 	def build_lstm(self):
 		model = Sequential()
-		model.add(LSTM(self.dims['output_dim'], input_shape=(self.dims['input_dim'], 1), return_sequences=True, recurrent_initializer='glorot_uniform', kernel_initializer='glorot_uniform'))
-		model.add(LSTM(self.dims['hidden_units'], recurrent_initializer='glorot_uniform', kernel_initializer='glorot_uniform'))
+		model.add(LSTM(self.dims['lstm_dim1'], input_shape=(self.dims['input_dim'], 1), return_sequences=True, recurrent_initializer='glorot_uniform', kernel_initializer='glorot_uniform'))
+		model.add(LSTM(self.dims['lstm_dim2'], recurrent_initializer='glorot_uniform', kernel_initializer='glorot_uniform'))
+		model.add(Dropout(0.4))
+		model.add(Dense(self.dims['dense_dim1'], activation='relu', kernel_initializer='glorot_uniform'))
 		model.add(Dropout(0.5))
-		model.add(Dense(self.dims['dense_dim'], activation='relu', kernel_initializer='glorot_uniform'))
+		model.add(Dense(self.dims['dense_dim2'], activation='relu', kernel_initializer='glorot_uniform'))
 		model.compile(loss=self.hypers['loss'], optimizer=self.hypers['optimizer'], metrics=self.hypers['metrics'])
 		model.summary()
 		plot_model(model, to_file='model.png')
