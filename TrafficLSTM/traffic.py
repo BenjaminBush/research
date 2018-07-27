@@ -1,8 +1,9 @@
 import numpy as np
-
-from lstm import LSTMNet 
+from sklearn.preprocessing import MinMaxScaler
+from models import Model
 import pandas as pd
 import os
+import json
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
@@ -66,17 +67,39 @@ min_ = scaler[1]
 
 y_scaled = y_test
 y_test -= min_
-y_test *= scale_
+y_test /= scale_
 
-lstm = LSTMNet()
-model = lstm.model
+
+model_name = "lstm"
+network = Model(model_name)
+model = network.model
 
 # Fit the model
-model.fit(X_train, y_train, batch_size=lstm.get_batch_size(), epochs=lstm.get_epochs())
+model.fit(X_train, y_train, batch_size=network.get_batch_size(), epochs=network.get_epochs())
 
 # Evaluate the model
-score = model.evaluate(X_test, y_test, batch_size=lstm.get_batch_size())
+score = model.evaluate(X_test, y_test, batch_size=network.get_batch_size())
 
 print("Model score: {}".format(score))
+
+
+# Store metadata
+metadata = {}
+batch_size = network.get_batch_size()
+epochs = network.get_epochs()
+
+metadata['model'] = model_name
+metadata['batch_size'] = batch_size
+metadata['epochs'] = epochs
+metadata['scale'] = scale_
+metadata['min'] = min_
+metadata['score'] = score
+
+# Store it as JSON so that Scala can read it
+with open('metadata.json', 'w+') as fp:
+    json.dump(metadata, fp)
+
+
+
 
 
