@@ -4,6 +4,7 @@ TrafficLSTM folder contains the source code for developing a 2-layer LSTM networ
 
 Network Architecture:
 ![No picture found](https://raw.githubusercontent.com/BenjaminBush/research/master/TrafficLSTM/model.png)
+
 Predictions vs. True flow on sample day:
 ![No picture found](https://raw.githubusercontent.com/BenjaminBush/research/master/TrafficLSTM/plotted_preds.png)
 
