@@ -36,10 +36,10 @@ class Model(object):
 	def default_hypers(self):
 		hypers = {}
 		hypers['batch_size'] = 128
-		hypers['epochs'] = 10
+		hypers['epochs'] = 100
 		hypers['loss'] = 'mse'
-		hypers['metrics'] = ['mape', 'mae']
-		hypers['optimizer'] = 'rmsprop'
+		hypers['metrics'] = ['mape']
+		hypers['optimizer'] = 'adam'
 		return hypers
 
 	def get_batch_size(self):
@@ -57,7 +57,6 @@ class Model(object):
 		model.add(Dropout(0.5))
 		model.add(Dense(self.dims['dense_dim2'], activation='relu', kernel_initializer='glorot_uniform'))
 		model.compile(loss=self.hypers['loss'], optimizer=self.hypers['optimizer'], metrics=self.hypers['metrics'])
-		model.summary()
 		plot_model(model, to_file='model.png')
 		return model
 

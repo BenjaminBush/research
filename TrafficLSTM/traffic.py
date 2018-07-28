@@ -5,9 +5,33 @@ import pandas as pd
 import os
 import json
 from sklearn.model_selection import train_test_split
-
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
+def plot_results(y_true, y_preds):
+    names = ['LSTM']
+    d = '2016-3-4 00:00'
+    x = pd.date_range(d, periods=288, freq='5min')
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.plot(x, y_true, label='True Data')
+    for name, y_pred in zip(names, y_preds):
+        ax.plot(x, y_pred, label=name)
+
+    plt.legend()
+    plt.grid(True)
+    plt.xlabel('Time of Day')
+    plt.ylabel('Flow')
+
+    date_format = mpl.dates.DateFormatter("%H:%M")
+    ax.xaxis.set_major_formatter(date_format)
+    fig.autofmt_xdate()
+
+    plt.show()
 
 
 def get_data(train_file, test_file, lag):
@@ -83,6 +107,17 @@ model.fit(X_train, y_train, batch_size=network.get_batch_size(), epochs=network.
 score = model.evaluate(X_test, y_test, batch_size=network.get_batch_size())
 
 print("Model score: {}".format(score))
+
+print("Model metrics {}".format(model.metrics_names))
+
+
+predicted = model.predict(X_test)
+predicted -= min_
+predicted /= scale_
+
+y_preds = []
+y_preds.append(predicted[:288])
+plot_results(y_test[: 288], y_preds)
 
 
 # Store metadata
