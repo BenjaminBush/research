@@ -36,7 +36,7 @@ class Model(object):
 	def default_hypers(self):
 		hypers = {}
 		hypers['batch_size'] = 128
-		hypers['epochs'] = 100
+		hypers['epochs'] = 10
 		hypers['loss'] = 'mse'
 		hypers['metrics'] = ['mape']
 		hypers['optimizer'] = 'adam'

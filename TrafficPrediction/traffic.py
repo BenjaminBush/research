@@ -91,17 +91,16 @@ X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
 scale_ = scaler[0]
 min_ = scaler[1]
 
-y_scaled = y_test
-y_test -= min_
-y_test /= scale_
-
 
 model_name = "lstm"
 network = Model(model_name)
 model = network.model
 
 # Fit the model
-model.fit(X_train, y_train, batch_size=network.get_batch_size(), epochs=network.get_epochs())
+model.fit(X_train, y_train, batch_size=network.get_batch_size(), epochs=network.get_epochs(), validation_split=0.1)
+
+# Save the model
+model.save(model_name+"_model.h5")
 
 # Evaluate the model
 score = model.evaluate(X_test, y_test, batch_size=network.get_batch_size())
@@ -114,6 +113,9 @@ print("Model metrics {}".format(model.metrics_names))
 predicted = model.predict(X_test)
 predicted -= min_
 predicted /= scale_
+
+y_test -= min_
+y_test /= scale_
 
 y_preds = []
 y_preds.append(predicted[:288])
