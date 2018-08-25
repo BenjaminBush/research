@@ -10,17 +10,16 @@ import random
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-def plot_results(y_true, y_preds):
-    names = ['LSTM']
-    d = '2016-3-4 00:00'
+def plot_results(day, y_true, y_preds):
+    day = 22 + day
+    d = '2018-3-' + str(day) + ' 00:00'
     x = pd.date_range(d, periods=288, freq='5min')
-
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
     ax.plot(x, y_true, label='True Data')
-    for name, y_pred in zip(names, y_preds):
-        ax.plot(x, y_pred, label=name)
+    for y_pred in y_preds:
+        ax.plot(x, y_pred, label='LSTM')
 
     plt.legend()
     plt.grid(True)
@@ -35,47 +34,47 @@ def plot_results(y_true, y_preds):
 
 
 def get_data(train_file, test_file, lag):
-	train = pd.read_csv(train_file)
-	test = pd.read_csv(test_file)
+    train = pd.read_csv(train_file)
+    test = pd.read_csv(test_file)
 
-	time_feature = '5 Minutes'
-	flow_feature = 'Flow (Veh/5 Minutes)'
+    time_feature = '5 Minutes'
+    flow_feature = 'Flow (Veh/5 Minutes)'
 
-	# Scale the flow between 0 and 1 using minmax	
-	feature_range = (0,1)
-	data_min = np.min(train[flow_feature], axis=0)
-	data_max = np.max(train[flow_feature], axis=0)
-	data_range = data_max - data_min
+    # Scale the flow between 0 and 1 using minmax    
+    feature_range = (0,1)
+    data_min = np.min(train[flow_feature], axis=0)
+    data_max = np.max(train[flow_feature], axis=0)
+    data_range = data_max - data_min
 
-	scale_ = ((feature_range[1] - feature_range[0])/data_range)
-	min_ = feature_range[0]-data_min*scale_
+    scale_ = ((feature_range[1] - feature_range[0])/data_range)
+    min_ = feature_range[0]-data_min*scale_
 
-	flow_train = train[flow_feature]
-	flow_train *= scale_
-	flow_train += min_
+    flow_train = train[flow_feature]
+    flow_train *= scale_
+    flow_train += min_
 
-	flow_test = test[flow_feature]
-	flow_test *= scale_
-	flow_test += min_
+    flow_test = test[flow_feature]
+    flow_test *= scale_
+    flow_test += min_
 
-	train_list, test_list = [], []
+    train_list, test_list = [], []
 
-	for i in range(lag, len(flow_train)-1):
-		train_list.append(flow_train[i-lag:i+1])
-	for i in range(lag, len(flow_test)-1):
-		test_list.append(flow_test[i-lag:i+1])
+    for i in range(lag, len(flow_train)-1):
+        train_list.append(flow_train[i-lag:i+1])
+    for i in range(lag, len(flow_test)-1):
+        test_list.append(flow_test[i-lag:i+1])
 
-	train_list = np.asarray(train_list)
-	test_list = np.asarray(test_list)
+    train_list = np.asarray(train_list)
+    test_list = np.asarray(test_list)
 
-	X_train = train_list[:, :-1]
-	y_train = train_list[:, -1]
-	X_test = test_list[:, :-1]
-	y_test = test_list[:, -1]
+    X_train = train_list[:, :-1]
+    y_train = train_list[:, -1]
+    X_test = test_list[:, :-1]
+    y_test = test_list[:, -1]
 
-	scaler = (scale_, min_)
+    scaler = (scale_, min_)
 
-	return X_train, y_train, X_test, y_test, scaler
+    return X_train, y_train, X_test, y_test, scaler
 
 train_file = '../data/pems_train.csv'
 test_file = '../data/pems_test.csv'
@@ -122,4 +121,4 @@ y_preds = []
 random_day = random.randint(0,6)
 idx = random_day*288
 y_preds.append(predicted[idx:idx+288])
-plot_results(y_test[idx:idx+288], y_preds)
+plot_results(random_day, y_test[idx:idx+288], y_preds)
