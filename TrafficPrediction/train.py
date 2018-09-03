@@ -40,7 +40,7 @@ def get_data(train_file, test_file, lag):
 	test = pd.read_csv(test_file)
 
 	time_feature = '5 Minutes'
-	flow_feature = 'Flow (Veh/5 Minutes)'
+	flow_feature = 'Lane 1 Flow (Veh/5 Minutes)'
 
 	# Scale the flow between 0 and 1 using minmax	
 	feature_range = (0,1)

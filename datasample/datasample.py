@@ -17,16 +17,11 @@ df = np.array(df)
 def pub_message():
     global index
     global df
-        #row_index = df[index]
-        #flow_index = row_index[1]
     data = df[index:index+12]
     flows = data[:, 1]
-        #time = row[0].decode('utf-8')
-        #message = str(flow) + ' ' + str(time)
-        #print(message)
     message = '  '.join(str(el) for el in flows)
     index += 1
-    writer.pub('nsq-spark-in', message, finish_pub)
+    writer.pub('nsq-spark-in', message.encode(), finish_pub)
 
 # Callback function
 def finish_pub(conn, data):
