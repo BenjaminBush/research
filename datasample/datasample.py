@@ -9,7 +9,7 @@ global index
 global df
 
 index = 0
-test = 'test.csv'
+test = '../data/pems_test.csv'
 df = pd.read_csv(test, encoding='utf-8').fillna(0)
 df = np.array(df)
 
