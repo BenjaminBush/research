@@ -29,7 +29,8 @@ def finish_pub(conn, data):
 
 
 
-writer = nsq.Writer(['127.0.0.1:4150'])
+#writer = nsq.Writer(['192.168.0.105:4150'])
+writer=nsq.Writer(['127.0.0.1:4150'])
 tornado.ioloop.PeriodicCallback(pub_message, 1000).start()
 nsq.run()
 
