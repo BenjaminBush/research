@@ -3,8 +3,10 @@ import tornado.ioloop
 import time
 
 def handler(message):
-    ms = int(round(time.time()*1000))
-    print("Message body: {},\nMessage Time: {} \n".format(message.body.decode("utf-8"), message.timestamp))
+    curr_ms = int(round(time.time()*1000))
+    old_ms = message.body.decode("utf-8").split(";")[1]
+    old_ms = int(float(old_ms))
+    print("Latency is : {} ms".format(curr_ms-old_ms))
     #print("Message: {},\nTime: {}\n".format(message, ms))
     return True
 
