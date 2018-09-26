@@ -3,6 +3,7 @@ import tornado.ioloop
 import time
 import pandas as pd
 import numpy as np
+import rdtscp_module
 
 # Declare and initialize global variables
 global index
@@ -20,9 +21,10 @@ def pub_message():
     data = df[index:index+12]
     flows = data[:, 1]
     message = '  '.join(str(el) for el in flows)
-    ms = int(time.time()*1000)
-    ms_data = " " + str(ms)
-    message += ms_data
+    #ns = int(time.time_ns())
+    ns = rdtscp_module.rdtscp()
+    ns_data = '  ' + str(ns)
+    message += ns_data
     index += 1
     writer.pub('nsq-spark-in', message.encode(), finish_pub)
 
@@ -34,6 +36,6 @@ def finish_pub(conn, data):
 
 #writer = nsq.Writer(['192.168.0.105:4150'])
 writer=nsq.Writer(['127.0.0.1:4150'])
-tornado.ioloop.PeriodicCallback(pub_message, 1).start()
+tornado.ioloop.PeriodicCallback(pub_message, 250).start()
 nsq.run()
 

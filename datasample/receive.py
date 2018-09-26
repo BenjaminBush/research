@@ -1,13 +1,56 @@
 import nsq
 import tornado.ioloop
 import time
+import rdtscp_module
+
+global true_flows
+global predicted_flows
+global latencies
+global messages_processed
+
+true_flows = []
+predicted_flows = []
+latencies = []
+messages_processed = 0
 
 def handler(message):
-    curr_ms = int(round(time.time()*1000))
-    old_ms = message.body.decode("utf-8").split(";")[1]
-    old_ms = int(float(old_ms))
-    print("Latency is : {} ms".format(curr_ms-old_ms))
-    #print("Message: {},\nTime: {}\n".format(message, ms))
+    #curr_ns = int(round(time.time_ns()))
+    curr_ns = rdtscp_module.rdtscp()
+
+    global true_flows
+    global predicted_flows
+    global latencies
+    global messages_processed
+
+    messages_processed += 1
+
+    data = message.body.decode("utf-8").split(";")
+    predicted_flows.append(data[0])
+    true_flows.append(data[1])
+
+    old_ns = message.body.decode("utf-8").split(";")[2]
+    old_ns = int(float(old_ms))
+    curr_latency = curr_ns - old_ns
+    latencies.append(curr_latency)
+
+    print("Latency is : {} ns".format(curr_latency))
+
+    if messages_processed % 100 == 0:
+        with open("predicted.txt", "w+") as file:
+            file.write(str(predicted_flows))
+        file.close()
+        predicted_flows = []
+
+        with open("true.txt", "w+") as file:
+            file.write(str(true_flows))
+        file.close()
+        true_flows = []
+
+        with open("latency.txt", "w+") as file:
+            file.write(str(latencies))
+        file.close()
+        latencies = []
+
     return True
 
 
