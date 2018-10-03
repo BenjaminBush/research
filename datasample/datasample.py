@@ -8,16 +8,23 @@ import rdtscp_module
 # Declare and initialize global variables
 global index
 global df
+global length
+
 
 index = 0
 test = '../data/pems_test.csv'
 df = pd.read_csv(test, encoding='utf-8').fillna(0)
 df = np.array(df)
+length = df.shape[0]
 
 # Publishes messages to NSQ by reading from csv file
 def pub_message():
     global index
     global df
+    global length
+
+    if index >= length:
+        return
     data = df[index:index+12]
     flows = data[:, 1]
     message = '  '.join(str(el) for el in flows)
