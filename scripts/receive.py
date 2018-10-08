@@ -29,7 +29,7 @@ def handler(message):
     true_flows.append(data[1])
 
     old_ns = message.body.decode("utf-8").split(";")[2]
-    old_ns = int(float(old_ms))
+    old_ns = int(float(old_ns))
     curr_latency = curr_ns - old_ns
     latencies.append(curr_latency)
 
