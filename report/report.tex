@@ -1,0 +1,43 @@
+\documentclass[sigconf]{acmart}
+\usepackage{polyglossia}
+\usepackage{booktabs} % For formal tables
+
+\begin{document}
+\title{TITLE OF PAPER HERE}
+
+\author{Benjamin Bush}
+\affiliation{%
+  \institution{Washington University in St. Louis}
+  \streetaddress{1 Brookings Drive}
+  \city{St. Louis}
+  \state{Missouri}
+  \postcode{63105}
+}
+\email{ben.bush@wustl.edu}
+
+
+
+\begin{abstract}
+Intelligent transportation relies on the Internet of Things (IoT), real-time cloud technologies, and
+machine learning algorithms to manage traffic flow. Intelligent transportation systems (ITS)
+require latency guarantees and data analytics solutions capable of ingesting and analyzing data in
+real-time to produce timely signals that are suitable for the prevailing traffic conditions. As data
+analytics engines migrate to virtualized environments, there is a need to preserve real-time
+performance on these virtualized platforms. In this research, we introduce a model of an ITS that
+predicts future traffic conditions from streaming data. This ITS is used as real-time workload in a
+virtualized environment to empirically compare latency guarantees using the Xen hypervisor.
+Experimental results show that the RTDS scheduler minimizes the latency of the streaming
+application while maintaining real-time performance.
+\end{abstract}
+
+
+
+\keywords{RT-Xen, realtime systems, machine learning, LSTM}
+
+
+\maketitle
+
+\input{samplebody-conf}
+
+
+\end{document}
