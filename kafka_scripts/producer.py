@@ -16,12 +16,12 @@ lag = 12
 
 # Experimental values
 num_batches = 0
-max_batches = 100
-burst_size = 1
+max_batches = 10
+burst_size = 200
 
 # Kafka setup
 producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
-topic = 'test-output'
+topic = 'input'
 
 while num_batches < max_batches:
     # Collect flows from dataframe

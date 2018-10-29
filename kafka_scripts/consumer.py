@@ -11,11 +11,11 @@ messages_processed = 0
 lag = 12
 
 # Experimental values
-burst_size = 1
+burst_size = 200
 max_received = 20000
 
 # Kafka Setup
-consumer = KafkaConsumer('test-output',
+consumer = KafkaConsumer('output',
 						bootstrap_servers=['localhost:9092'])
 
 for message in consumer:
@@ -28,6 +28,14 @@ for message in consumer:
 	# Split the data
 	data = data.split(";")
 
+	# Calculate the latency
+	old_ns = int(float(data[-1]))
+	latency = curr_ns - old_ns
+	latencies.append(latency)	
+
+	# Get the predicted flow, append
+	predicted_flows.append(data[-2])
+
 	# Populate the actual flows array
 	actual_flows = []
 	i = 0
@@ -35,22 +43,16 @@ for message in consumer:
 		actual_flows.append(data[i])
 		i += 1
 
-	# Append to true flows, predicted flows
+	# Append to true flows
 	true_flows.append(actual_flows)
-	predicted_flows.append(data[i])
 
-	# Calculate latency, append
-	i += 1
 
-	old_ns = int(float(data[i]))
-	latency = curr_ns - old_ns
-	latencies.append(latency)
 
 	# Bookkeeping
 	messages_processed += 1
 	if messages_processed % burst_size == 0:
 		print("Actual_flows : {}".format(actual_flows))
-		print("Predicted_flows : {}".format(data[i-1]))
+		print("Predicted_flows : {}".format(data[-2]))
 		print("Timestamp : {}".format(old_ns))
 		print(messages_processed)
 
