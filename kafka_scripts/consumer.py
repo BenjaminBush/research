@@ -53,7 +53,7 @@ for message in consumer:
 	if messages_processed % burst_size == 0:
 		print("Actual_flows : {}".format(actual_flows))
 		print("Predicted_flows : {}".format(data[-2]))
-		print("Timestamp : {}".format(old_ns))
+		print("Latency : {}".format(latency))
 		print(messages_processed)
 
 	if messages_processed % max_received == 0:
