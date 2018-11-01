@@ -15,8 +15,7 @@ burst_size = 200
 max_received = 20000
 
 # Kafka Setup
-consumer = KafkaConsumer('output',
-						bootstrap_servers=['localhost:9092'])
+consumer = KafkaConsumer('output', bootstrap_servers=['localhost:9092'])
 
 for message in consumer:
 	# Timestamp right away
