@@ -42,15 +42,17 @@ while num_batches < max_batches:
     message += ns_data
 
     producer.send(topic, value=str.encode(message))
+    
+    # Increment index
+    index += 1
+    if index >= 2000:
+        index = 0
 
     # Check for a new batch, potentially sleep
     if index % burst_size == 0:
         num_batches += 1
         producer.flush()
 
-    # Increment index
-    index += 1
-    if index >= 2000:
-        index = 0
+
 
 
