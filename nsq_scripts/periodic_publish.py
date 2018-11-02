@@ -20,10 +20,18 @@ topic = 'nsq-spark-in'
 conn = gnsq.Nsqd(address='192.168.0.120', http_port='4151')
 
 num_batches = 0
-max_batches = 100
-burst_size = 200
+# Experimental values
+messages_sent = 0
+max_messages = 20000
 
-while num_batches < max_batches:
+random_sleep = 0        # Binary flag for which sleep list to loat
+sleep_times = []
+if random_sleep:
+    sleep_times = np.loadtxt('../sleep/random_sleep_times.txt').tolist()
+else:
+    sleep_times = np.loadtxt('../sleep/uniform_sleep_times.txt').tolist()
+
+while messages_sent < max_messages:
     # Collect flows from dataframe
     data = df[index:index+lag]
     flows = data[:,1]
@@ -38,18 +46,15 @@ while num_batches < max_batches:
     ns_data = '  '+str(ns)
     message += ns_data
 
+    # Publish and sleep
+    response = conn.publish(topic, message)
+    if response == b'OK':
+        print(index)
+
+    time.sleep(sleep_times[index])
+
     # Increment index
     index += 1
     if index >= 2000:
         index = 0
 
-    # Check for a new batch, potentially sleep
-    if index % burst_size == 0:
-        num_batches += 1
-        sleep_time = random.uniform(1.5, 3)
-        time.sleep(sleep_time)
-
-    # Publish and sleep
-    response = conn.publish(topic, message)
-    if response == b'OK':
-        print(index)

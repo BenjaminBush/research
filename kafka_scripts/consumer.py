@@ -11,7 +11,7 @@ messages_processed = 0
 lag = 12
 
 # Experimental values
-burst_size = 200
+checkpoint_size = 200
 max_received = 20000
 
 # Kafka Setup
@@ -46,10 +46,9 @@ for message in consumer:
 	true_flows.append(actual_flows)
 
 
-
 	# Bookkeeping
 	messages_processed += 1
-	if messages_processed % burst_size == 0:
+	if messages_processed % checkpoint_size == 0:
 		print("Actual_flows : {}".format(actual_flows))
 		print("Predicted_flows : {}".format(data[-2]))
 		print("Latency : {}".format(latency))
