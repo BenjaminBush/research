@@ -4,9 +4,7 @@ from periodic_producer import PeriodicProducer
 
 
 def create_and_run(city):
-	test_file = '../data/' + str(city) + '/test.csv'
-	print(test_file)
-	producer = PeriodicProducer(test_file)
+	producer = PeriodicProducer(city)
 	producer.run()
 
 

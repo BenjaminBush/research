@@ -8,8 +8,9 @@ import random
 import re
 
 class PeriodicProducer(object):
-    def __init__(self, test_file, max_messages=20000, random_sleep=0, bootstrap_servers='localhost:9092'):
-        self.test_file = test_file
+    def __init__(self, city, max_messages=20000, random_sleep=0, bootstrap_servers='localhost:9092'):
+        self.city = city
+        self.test_file = '../data/' + str(self.city) + '/test.csv'
         self.max_messages = max_messages
         self.random_sleep = random_sleep
 
@@ -21,18 +22,6 @@ class PeriodicProducer(object):
         self.lag = 12
         self.messages_sent = 0
 
-        self.pattern = re.compile(r"../data/(?P<city>[a-zA-Z]+?)/(?P<test_file>[a-zA-Z0-9 ]+?).csv")
-        self.m = self.pattern.search(self.test_file)
-        if self.m:
-            self.city = self.m.group('city')
-        else:
-            self.city = 'el_segundo'
-        # try:
-        #     self.city = self.m.group('city')
-        # except AttributeError as e:
-        #     print(self.test_file)
-        #     raise e
-        # Kafka setup
         self.producer = KafkaProducer(bootstrap_servers=[bootstrap_servers])
         self.topic = str(self.city) + "-input"    
 
