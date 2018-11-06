@@ -23,8 +23,15 @@ class PeriodicProducer(object):
 
         self.pattern = re.compile(r"../data/(?P<city>[a-zA-Z]+?)/(?P<test_file>[a-zA-Z0-9 ]+?).csv")
         self.m = self.pattern.search(self.test_file)
-        self.city = self.m.group('city')
-
+        if self.m:
+            self.city = self.m.group('city')
+        else:
+            self.city = 'el_segundo'
+        # try:
+        #     self.city = self.m.group('city')
+        # except AttributeError as e:
+        #     print(self.test_file)
+        #     raise e
         # Kafka setup
         self.producer = KafkaProducer(bootstrap_servers=[bootstrap_servers])
         self.topic = str(self.city) + "-input"    
@@ -40,7 +47,7 @@ class PeriodicProducer(object):
         while self.messages_sent < self.max_messages:
             # Collect flows from dataframe
             data = self.df[self.index:self.index+self.lag]
-            flows = data[:,1]
+            flows = data[:,2]
 
             # Create the message
             message = ';'.join(str(flow) for flow in flows)
