@@ -11,7 +11,7 @@ messages_processed = 0
 lag = 12
 
 # Experimental values
-checkpoint_size = 200
+checkpoint_size = 10
 max_received = 20000
 
 # Kafka Setup
