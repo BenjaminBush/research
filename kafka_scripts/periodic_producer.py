@@ -23,7 +23,7 @@ class PeriodicProducer(object):
         self.messages_sent = 0
 
         self.producer = KafkaProducer(bootstrap_servers=[bootstrap_servers])
-        self.topic = str(self.city) + "-input"    
+        self.topic = "input"    
 
 
         self.sleep_times = []
@@ -39,7 +39,8 @@ class PeriodicProducer(object):
             flows = data[:,2]
 
             # Create the message
-            message = ';'.join(str(flow) for flow in flows)
+            message = str(self.city) + ";"
+            message += ';'.join(str(flow) for flow in flows)
 
             fake_prediction = ";" + str(0)
             message += fake_prediction

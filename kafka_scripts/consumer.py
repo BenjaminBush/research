@@ -15,7 +15,7 @@ checkpoint_size = 200
 max_received = 20000
 
 # Kafka Setup
-consumer = KafkaConsumer('redondo-output', bootstrap_servers=['localhost:9092'])
+consumer = KafkaConsumer('output', bootstrap_servers=['localhost:9092'])
 
 for message in consumer:
 	# Timestamp right away
@@ -27,6 +27,9 @@ for message in consumer:
 	# Split the data
 	data = data.split(";")
 
+	# Get the location
+	city = data[0]
+
 	# Calculate the latency
 	old_ns = int(float(data[-1]))
 	latency = curr_ns - old_ns
@@ -37,8 +40,8 @@ for message in consumer:
 
 	# Populate the actual flows array
 	actual_flows = []
-	i = 0
-	while i < lag:
+	i = 1
+	while i < (lag+1):
 		actual_flows.append(data[i])
 		i += 1
 
@@ -49,6 +52,7 @@ for message in consumer:
 	# Bookkeeping
 	messages_processed += 1
 	if messages_processed % checkpoint_size == 0:
+		print("City : {}".format(city))
 		print("Actual_flows : {}".format(actual_flows))
 		print("Predicted_flows : {}".format(data[-2]))
 		print("Latency : {}".format(latency))
