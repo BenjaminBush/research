@@ -24,37 +24,48 @@ for message in consumer:
 	# Decode the raw bytes
 	data = message.value.decode('utf-8')
 
+	#print(data)
+
 	# Split the data
 	data = data.split(";")
 
+	i = 0
+
 	# Get the location
-	city = data[0]
+	city = data[i]
+	i += 1
 
-	# Calculate the latency
-	old_ns = int(float(data[-1]))
-	latency = curr_ns - old_ns
-	latencies.append(latency)	
-
-	# Get the predicted flow, append
-	predicted_flows.append(data[-2])
+	# Get the averge speed
+	avg_speed = data[i]
+	i += 1
 
 	# Populate the actual flows array
 	actual_flows = []
-	i = 1
-	while i < (lag+1):
+	while i < (lag+2):
 		actual_flows.append(data[i])
 		i += 1
-
-	# Append to true flows
 	true_flows.append(actual_flows)
 
+	# Get the predicted flow, append
+	pred_flow = data[i]
+	predicted_flows.append(pred_flow)
+	i += 1
+
+	# Calculate the latency
+	old_ns = int(float(data[i]))
+	latency = curr_ns - old_ns
+	latencies.append(latency)	
+	i += 1
+
+	# Get the graph path
+	graph_path = data[i:][0]
 
 	# Bookkeeping
 	messages_processed += 1
 	if messages_processed % checkpoint_size == 0:
 		print("City : {}".format(city))
 		print("Actual_flows : {}".format(actual_flows))
-		print("Predicted_flows : {}".format(data[-2]))
+		print("Predicted_flows : {}".format(pred_flow))
 		print("Latency : {}".format(latency))
 		print(messages_processed)
 

@@ -37,9 +37,11 @@ class PeriodicProducer(object):
             # Collect flows from dataframe
             data = self.df[self.index:self.index+self.lag]
             flows = data[:,2]
+            avg_speeds = data[:,3]
+            avg_speed = np.mean(avg_speeds)
 
             # Create the message
-            message = str(self.city) + ";"
+            message = str(self.city) + ";" + str(avg_speed) + ";"
             message += ';'.join(str(flow) for flow in flows)
 
             fake_prediction = ";" + str(0)
