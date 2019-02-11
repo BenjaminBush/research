@@ -7,10 +7,12 @@ This folder contains python scripts used for the experiment.
 * run_producers.py - Creates a periodic producer for each detector location, pins the producer task to a CPU, and executes.
 
 # How to Run Experiment
-1. Start zookeeper
-2. Start a kafka broker
-3. Start the consumer
+1. Start zookeeper: 
+`bin/zookeeper-server-start.sh config/zookeeper.properties`
+2. Start a kafka broker:
+`bin/kafka-server-start.sh config/server.properties`
+3. Start the consumer:
 `python consumer.py`
 4. Start the Flink Application (see <https://github.com/BenjaminBush/flinkits>)
-5. Start the producers
+5. Start the producers:
 `python run_producers.py`
