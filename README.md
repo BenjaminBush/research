@@ -3,42 +3,43 @@ This repository contains code related to the following
 * Neural Network Training and Testing (for Traffic Flow Prediction)
 * Evaluating Performance of Other Regression Methods
 * Traffic Flow Data Collected from PeMS
-* Producing and consuming records to/from Kafka
+* Producing and Consuming Records to/from Kafka
+* Experimental Results
 
 ## Neural Network Training and Testing
-All code related to the LSTM network is in the `TrafficPrediction` folder. Important files in here are:
-* csv_concatentation_multiple.ipynb
+All code related to the LSTM network is in the `TrafficPrediction` folder.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concatenates data from multiple PeMS csv files into a large CSV for training/testing
-* evaluate.py
+## Evaluating Performance of Other Regression Methods
+Performed by `evaluate_regression.py` in the `TrafficPrediction` folder.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Evaluates the performance of the trained neural network</p>
-* lstm_model.h5
+## Traffic Flow Data Collected from PeMS
+Contained in the `data` folder
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stored model of the neural network
-* models.py
+## Producing and Consuming Records to/from Kafka
+Relevant code is located in `kafka_scripts`
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Defines models and hyperparameters
-* train.py
+## Results
+All latencies and corresponding analysis are located in the `results` folder
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Main driver for executing neural network training
+Please visit each of these folders and see their README for more information. We will provide brief overviews for the folders not listed above. Note that the following folders are either no longer useful to this experiment, or only contain helper code. 
+
+## images
+Stores images that are helpful visualiziations of the neural net/system architecture
+
+## nsq_scripts
+This folder is deprecated. A previous version of the experiments used NSQ instead of Kafka, and these escripts contained the NSQ equivalents of what is located in the `kafka_scripts` folder. They may be used as reference, but should be updated should you wish to use them in an experimental setting
+
+## old_data
+Contains data pertaining to detector locations that were not used in the later versions of the experiment
+
+## report
+Contains LaTeX for the written report
+
+## sleep
+Helper functions to generate periodic workloads
+
+## utils
+Random collection of utility functions
 
 
-# Centralized repository for Master's Thesis Development
 
-TrafficLSTM folder contains the source code for developing a 2-layer LSTM network for traffic prediction.
-
-Network Architecture:
-
-
-![No picture found](https://raw.githubusercontent.com/BenjaminBush/research/master/TrafficPrediction/model.png)
-
-Predictions vs. True flow on sample day:
-![No picture found](https://raw.githubusercontent.com/BenjaminBush/research/master/TrafficPrediction/plotted_preds.png)
-
-datasample.(go/py) are scripts that will publish test data to an NSQ broker at a given time interval for simulation
-
-See https://github.com/BenjaminBush/nsq-spark-receiver for a Spark Streaming implementation of an NSQ Receiver
-
-Must change taskmanager.numberOfTaskSlots in flink.conf to be the same as the number of VCPUs
-  - problem: need 1 for each job, yielding 8 vcpus, but do we really need this many?
