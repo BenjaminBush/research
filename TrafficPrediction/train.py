@@ -9,6 +9,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import keras
 
+# Specify that we have a GPU and to use it for training/testing
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 def plot_results(y_true, y_preds):
@@ -48,9 +49,11 @@ def get_data(train_file, test_file, lag):
 	data_max = np.max(train[flow_feature], axis=0)
 	data_range = data_max - data_min
 
+    # Get the scale, min
 	scale_ = ((feature_range[1] - feature_range[0])/data_range)
 	min_ = feature_range[0]-data_min*scale_
 
+    # Scale the training and testing data
 	flow_train = train[flow_feature]
 	flow_train *= scale_
 	flow_train += min_
@@ -92,7 +95,7 @@ X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
 scale_ = scaler[0]
 min_ = scaler[1]
 
-
+# Specify the model, build
 model_name = "lstm"
 network = Model(model_name)
 model = network.model

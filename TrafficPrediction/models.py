@@ -16,10 +16,10 @@ class Model(object):
 			self.model = self.build_lstm()
 		elif model == "gru":
 			print("Loading GRU model.")
-			self.model = self.build_lstm() 	# Todo: Implement build_gru()
+			self.model = self.build_lstm() 	# TODO: Implement build_gru()
 		elif model == "rnn":
 			print("Loading RNN model.")
-			self.model = self.build_lstm()	# Todo: Implement build_rnn()
+			self.model = self.build_lstm()	# TODO: Implement build_rnn()
 		else:
 			print("Unknown network")
 			sys.exit()

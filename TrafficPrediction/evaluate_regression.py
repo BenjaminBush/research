@@ -11,6 +11,7 @@ import sklearn.metrics as metrics
 import math 
 import random
 
+# Specify that we have a GPU and to use it for training/testing
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 def plot_results(day, y_true, y_preds):
@@ -48,10 +49,12 @@ def get_data(train_file, test_file, lag):
     data_min = np.min(train[flow_feature], axis=0)
     data_max = np.max(train[flow_feature], axis=0)
     data_range = data_max - data_min
-
+   
+    # Get the scale, min
     scale_ = ((feature_range[1] - feature_range[0])/data_range)
     min_ = feature_range[0]-data_min*scale_
 
+    # Scale the training and testing data
     flow_train = train[flow_feature]
     flow_train *= scale_
     flow_train += min_
@@ -85,10 +88,6 @@ lag = 12
 
 X_train, y_train, X_test, y_test, scaler = get_data(train_file, test_file, lag)
 
-
-# Reshape to (samples, dimension, timestep)
-# X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
-# X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
 
 scale_ = scaler[0]
 min_ = scaler[1]
