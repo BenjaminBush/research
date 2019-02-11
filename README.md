@@ -16,7 +16,7 @@ Performed by `evaluate_regression.py` in the `TrafficPrediction` folder.
 Contained in the `data` folder
 
 ## Producing and Consuming Records to/from Kafka
-Relevant code is located in `kafka_scripts`
+Relevant code is located in `kafka_scripts`. Also contains information on how to run the experiment. 
 
 ## Results
 All latencies and corresponding analysis are located in the `results` folder
