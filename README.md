@@ -21,24 +21,25 @@ Relevant code is located in `kafka_scripts`
 ## Results
 All latencies and corresponding analysis are located in the `results` folder
 
+
 Please visit each of these folders and see their README for more information. We will provide brief overviews for the folders not listed above. Note that the following folders are either no longer useful to this experiment, or only contain helper code. 
 
-## images
+### images
 Stores images that are helpful visualiziations of the neural net/system architecture
 
-## nsq_scripts
+### nsq_scripts
 This folder is deprecated. A previous version of the experiments used NSQ instead of Kafka, and these escripts contained the NSQ equivalents of what is located in the `kafka_scripts` folder. They may be used as reference, but should be updated should you wish to use them in an experimental setting
 
-## old_data
+### old_data
 Contains data pertaining to detector locations that were not used in the later versions of the experiment
 
-## report
+### report
 Contains LaTeX for the written report
 
-## sleep
+### sleep
 Helper functions to generate periodic workloads
 
-## utils
+### utils
 Random collection of utility functions
 
 
