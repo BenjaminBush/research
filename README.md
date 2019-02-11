@@ -22,7 +22,9 @@ Relevant code is located in `kafka_scripts`
 All latencies and corresponding analysis are located in the `results` folder
 
 
-Please visit each of these folders and see their README for more information. We will provide brief overviews for the folders not listed above. Note that the following folders are either no longer useful to this experiment, or only contain helper code. 
+*Please visit each of these folders and see their README for more information. We will provide brief overviews for the folders not listed above. Note that the following folders are either no longer useful to this experiment, or only contain helper code.*
+
+## Other Files/Folders
 
 ### images
 Stores images that are helpful visualiziations of the neural net/system architecture
